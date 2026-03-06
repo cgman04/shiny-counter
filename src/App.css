@@ -1,0 +1,17 @@
+body {
+  background-color: transparent !important;
+}
+
+#root {
+  background-color: transparent !important;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+}
+
+.app-container {
+  background-color: transparent !important;
+}
+
+/* the rest of layout is handled in globals.css */
