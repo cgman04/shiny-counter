@@ -10,7 +10,6 @@ const __dirname = path.dirname(__filename);
 
 const POKEMON_COUNT = 1025; // As of Gen 9
 const GENS = [
-  { num: 1, dir: 'generation-i' },
   { num: 2, dir: 'generation-ii' },
   { num: 3, dir: 'generation-iii' },
   { num: 4, dir: 'generation-iv' },
