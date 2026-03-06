@@ -42,17 +42,39 @@ async function getPokemonList() {
 // Download a file from URL
 function downloadFile(url, filepath) {
   return new Promise((resolve, reject) => {
-    const protocol = url.startsWith('https') ? https : http;
-    const file = fs.createWriteStream(filepath);
+    const protocol = url.startsWith("https") ? https : http;
 
     protocol.get(url, (res) => {
+      const { statusCode, headers } = res;
+
+      if (statusCode !== 200) {
+        res.resume(); // drain response
+        return reject(new Error(`HTTP ${statusCode} for ${url}`));
+      }
+
+      const contentType = headers["content-type"] || "";
+      if (!contentType.startsWith("image/png")) {
+        res.resume();
+        return reject(
+          new Error(`Invalid content-type "${contentType}" for ${url}`)
+        );
+      }
+
+      const file = fs.createWriteStream(filepath);
+
       res.pipe(file);
-      file.on('finish', () => {
+
+      file.on("finish", () => {
         file.close();
         resolve();
       });
-    }).on('error', (err) => {
-      fs.unlink(filepath, () => { }); // Delete the file if error
+
+      file.on("error", (err) => {
+        fs.unlink(filepath, () => { });
+        reject(err);
+      });
+    }).on("error", (err) => {
+      fs.unlink(filepath, () => { });
       reject(err);
     });
   });
